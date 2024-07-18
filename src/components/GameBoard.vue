@@ -1,36 +1,38 @@
 <template>
-  <div class="row">
+  <div
+    class="row"
+    :class="{ 'items-end': props.flip, 'items-start': !props.flip }"
+  >
     <div v-for="(row, x) in board" :key="x" class="column col">
-      <p
-        v-if="!props.flip"
-        class="col col-shrink text-center q-mt-sm q-mb-none"
-      >
+      <p v-if="!props.flip" class="col col-shrink text-center q-my-sm">
         {{ score(row) }}
       </p>
       <div class="col column" v-if="props.flip">
         <q-input
           v-for="(cell, y) in row"
           outlined
+          :item-aligned="true"
           min="0"
           max="6"
           :key="y"
           v-model="board[x][y]"
           type="number"
-          class="col full-width text-center"
+          class="col fit text-center"
         />
       </div>
       <div class="col column" v-if="!props.flip">
         <q-input
           v-for="(cell, y) in row.reverse()"
           outlined
+          :item-aligned="true"
           min="0"
           :key="y"
           v-model="board[x][y]"
           type="number"
-          class="col full-width text-center"
+          class="col fit text-center"
         />
       </div>
-      <p v-if="props.flip" class="col col-shrink text-center q-mb-sm q-mt-none">
+      <p v-if="props.flip" class="col col-shrink text-center q-my-sm">
         {{ score(row) }}
       </p>
     </div>
@@ -72,3 +74,9 @@ const score = (row: number[]) => {
   return s;
 };
 </script>
+
+<style>
+.text-center input {
+  text-align: center;
+}
+</style>
