@@ -1,9 +1,12 @@
 name: Build/android
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:

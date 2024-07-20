@@ -7,7 +7,7 @@
       <p v-if="!props.flip" class="col col-shrink text-center q-my-sm">
         {{ score(row) }}
       </p>
-      <div class="col column" v-if="props.flip">
+      <div class="col column">
         <q-input
           v-for="(cell, y) in row"
           outlined
@@ -18,18 +18,7 @@
           v-model="board[x][y]"
           type="number"
           class="col fit text-center"
-        />
-      </div>
-      <div class="col column" v-if="!props.flip">
-        <q-input
-          v-for="(cell, y) in row.reverse()"
-          outlined
-          :item-aligned="true"
-          min="0"
-          :key="y"
-          v-model="board[x][y]"
-          type="number"
-          class="col fit text-center"
+          @click="selectInputText"
         />
       </div>
       <p v-if="props.flip" class="col col-shrink text-center q-my-sm">
@@ -50,28 +39,35 @@ const props = withDefaults(defineProps<Props>(), {
   flip: false,
 });
 
-const board = ref<Array<Array<number>>>([
+const board = ref<Array<Array<number | string>>>([
   [0, 0, 0],
   [0, 0, 0],
   [0, 0, 0],
 ]);
 
-const score = (row: number[]) => {
+const score = (row: (number | string)[]) => {
   const counts: Record<number, number> = {};
   row.forEach((cell) => {
-    if (counts[cell]) {
-      counts[cell] += 1;
+    const v = parseInt(cell as string);
+    if (counts[v]) {
+      counts[v] += 1;
     } else {
-      counts[cell] = 1;
+      counts[v] = 1;
     }
   });
 
   let s = 0;
   row.forEach((cell) => {
-    s += cell * counts[cell];
+    const v = parseInt(cell as string);
+    s += v * counts[v];
   });
 
   return s;
+};
+
+const selectInputText = (event: MouseEvent) => {
+  const target = event.target as HTMLInputElement;
+  target.select();
 };
 </script>
 
